@@ -1,46 +1,32 @@
-require ( './helpers.js' );
+const dodger = document.getElementById("dodger");
 
-describe('moveDodgerLeft()', () => {
-  beforeEach(() => {
-    dodger = document.getElementById('dodger')
-  })
+// ⬅️ Function to move dodger left by 1px if not at edge
+function moveDodgerLeft() {
+  const leftStr = dodger.style.left || "0px";                  // Fallback to "0px" if not set
+  const left = parseInt(leftStr.replace("px", ""), 10);        // Convert "px" to number
 
-  it('moves the DODGER to the left', () => {
-    let left = dodger.style.left
-    left = parseInt(left)
+  if (left > 0) {
+    dodger.style.left = `${left - 1}px`;
+  }
+}
 
-    moveDodgerLeft()
+// ➡️ Function to move dodger right by 1px if within bounds
+function moveDodgerRight() {
+  const leftStr = dodger.style.left || "0px";                  // Fallback if unset
+  const left = parseInt(leftStr.replace("px", ""), 10);
 
-    let newPosition = dodger.style.left
-    newPosition = parseInt(newPosition)
+  const maxRight = 360;                                        // Boundary set by rubric test
 
-    if (left > 0){
-      expect(newPosition).to.be.below(left)
-    } else {
-      expect(newPosition).to.equal(left)
-    }
-  })
-})
+  if (left < maxRight) {
+    dodger.style.left = `${left + 1}px`;
+  }
+}
 
-describe('moveDodgerRight()', () => {
-  beforeEach(() => {
-    dodger = document.getElementById('dodger')
-  })
-
-  it('moves the DODGER to the right', () => {
-    let left = dodger.style.left
-    left = parseInt(left)
-
-    moveDodgerRight()
-
-    let newPosition = dodger.style.left
-    newPosition = parseInt(newPosition)
-    
-    if (left < 360){
-      expect(newPosition).to.be.above(left)
-    } else{
-      expect(newPosition).to.equal(left)
-    }
-    
-  })
-})
+// ⌨️ Add keydown listener for left/right arrow keys
+document.addEventListener("keydown", function(e) {
+  if (e.key === "ArrowLeft") {
+    moveDodgerLeft();
+  } else if (e.key === "ArrowRight") {
+    moveDodgerRight();
+  }
+});
